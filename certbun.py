@@ -32,10 +32,12 @@ if len(sys.argv)>1: #at least the config and root domain is specified
 	f.write(certJSON["publickey"])
 	f.close()
 
-	f = open(apiConfig["intermediateCertLocation"], "w")
-	print("Installing " + apiConfig["intermediateCertLocation"])
-	f.write(certJSON["intermediatecertificate"])
-	f.close()
+	if "intermediateCertLocation" in apiConfig \
+			and "intermediatecertificate" in certJSON:
+		f = open(apiConfig["intermediateCertLocation"], "w")
+		print("Installing " + apiConfig["intermediateCertLocation"])
+		f.write(certJSON["intermediatecertificate"])
+		f.close()
 	
 	print("\nExecuting system command:\n" + apiConfig["commandToReloadWebserver"] + "\n")
 		
