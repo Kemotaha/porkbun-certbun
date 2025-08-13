@@ -19,27 +19,19 @@ if len(sys.argv)>1: #at least the config and root domain is specified
     print("Downloading certs for " + rootDomain + "\n");
     certJSON=getSSL(rootDomain)
 
-    f = open(apiConfig["domainCertLocation"], "w")
-    print("Installing " + apiConfig["domainCertLocation"])
-    f.write(certJSON["certificatechain"])
-    f.close()
+    certConfig = {
+            "domainCertLocation": "certificatechain",
+            "privateKeyLocation": "privatekey",
+            "publicKeyLocation": "publickey",
+            "intermediateCertLocation": "intermediatecertificate"
+            }
 
-    f = open(apiConfig["privateKeyLocation"], "w")
-    print("Installing " + apiConfig["privateKeyLocation"])
-    f.write(certJSON["privatekey"])
-    f.close()
-
-    f = open(apiConfig["publicKeyLocation"], "w")
-    print("Installing " + apiConfig["publicKeyLocation"])
-    f.write(certJSON["publickey"])
-    f.close()
-
-    if "intermediateCertLocation" in apiConfig \
-            and "intermediatecertificate" in certJSON:
-        f = open(apiConfig["intermediateCertLocation"], "w")
-        print("Installing " + apiConfig["intermediateCertLocation"])
-        f.write(certJSON["intermediatecertificate"])
-        f.close()
+    for option in certConfig:
+        if option in apiConfig and option in certJSON:
+            f = open(apiConfig[option], "w")
+            print("Installing " + apiConfig[option])
+            f.write(certJSON[certConfig[option]])
+            f.close()
 
     print("\nExecuting system command:\n" + apiConfig["commandToReloadWebserver"] + "\n")
 
