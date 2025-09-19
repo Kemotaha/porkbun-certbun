@@ -27,7 +27,7 @@ if len(sys.argv)>1: #at least the config and root domain is specified
             }
 
     for option in certConfig:
-        if option in apiConfig and option in certJSON:
+        if option in apiConfig and certConfig[option] in certJSON:
             f = open(apiConfig[option], "w")
             print("Installing " + apiConfig[option])
             f.write(certJSON[certConfig[option]])
